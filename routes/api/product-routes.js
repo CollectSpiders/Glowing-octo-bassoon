@@ -111,6 +111,22 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  Product.destroy({
+    // deletes product with the given id
+    where: { id: req.params.id },
+  })
+    .then ((deletedProduct) => {
+      if (!deletedProduct){
+        // if the product is not found, return a 404 error
+        res.status(404).json({ message: 'No product found with this id'});
+        return;
+      }
+      res.json(deletedProduct)
+    })
+    .catch((err) =>{
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 module.exports = router;
